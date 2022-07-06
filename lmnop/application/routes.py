@@ -31,7 +31,7 @@ def verify(tok):
 #    app.logger.error(Tokens.query.all())
     tokenquery = Tokens.query.filter(Tokens.user_token==tok).first()
 #    breakpoint()
-    app.logger.error
+    app.logger.error(tokenquery)
     tokenexpiredstatus = tokenexpiredcheck(tokenquery)
     if tokenexpiredstatus:
         return jsonify({"expired":"True"})
