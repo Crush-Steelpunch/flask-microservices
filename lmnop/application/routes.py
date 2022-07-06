@@ -40,8 +40,9 @@ def verify(tok):
 def gentoken(uid):
     response = requests.get('http://bingo:5000/uid/' + uid)
     respjson = response.json()
-    if respjson[0].id is None:
-        return Response(status=400)
+    print(respjson, file=sys.stderr)
+#    if respjson[0].id is None:
+#        return Response(status=400)
     tokenquery = Tokens.query.filter(Tokens.user_id==uid).first()
     if tokenquery is None:
         new_tok_dict = gennewtoken()
