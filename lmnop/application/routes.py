@@ -13,7 +13,9 @@ def tokenexpiredcheck(uidcheck):
         return True
     else: 
         # has it expired?
+        app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time())
         if uidcheck.user_expiry.strftime( '$s' ) < str(time()):
+            
             return False
     return True
 
@@ -38,6 +40,7 @@ def verify(tok):
 
 @app.route('/reqtoken/<uid>', methods = ['POST'])
 def gentoken(uid):
+    # check in with bingo to see if the user exists
     response = requests.get('http://bingo:5000/uid/' + uid)
     respjson = response.json()
 #    app.logger.error(respjson)
