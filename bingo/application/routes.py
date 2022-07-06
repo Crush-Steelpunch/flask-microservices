@@ -31,6 +31,11 @@ def search(searchstring):
     jsoned_users = jsonify_user(finduser)
     return jsonify(jsoned_users)
 
+@app.route('/uid/<int:uid>', methods = ['GET'])
+def search(uid):
+    finduser = Users.query.filter(Users.id==uid).first()
+    jsoned_users = jsonify_user(finduser)
+    return jsonify(jsoned_users)
 # add users
 @app.route('/adduser', methods = ['POST'])
 def useradd():
