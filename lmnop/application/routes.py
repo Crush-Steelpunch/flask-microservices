@@ -9,11 +9,11 @@ import sys
 
 def tokenexpiredcheck(uidcheck):
     # Does a token exist in the db?
+    app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time()))
     if uidcheck is None:
         return True
     else: 
         # has it expired?
-        app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time()))
         if uidcheck.user_expiry.strftime( '$s' ) < str(time()):
             
             return False
