@@ -5,9 +5,12 @@ services:
     build: ./bingo/Dockerfile
     image: baggypants/bingo:latest
     ports:
+    - published: 5000
   lmnop:
     container_name: lmnop
     build: .lmnop/Dockerfile
     image: baggypants/lmnop:latest
+    ports:
+    - published: 5000
 
 
