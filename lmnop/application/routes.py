@@ -13,7 +13,7 @@ def tokenexpiredcheck(uidcheck):
         return True
     else: 
         # has it expired?
-        app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time())
+        app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time())):
         if uidcheck.user_expiry.strftime( '$s' ) < str(time()):
             
             return False
