@@ -29,6 +29,7 @@ def gennewtoken():
 @app.route('/<tok>', methods = ['GET'])
 def verify(tok):
 #    app.logger.error(Tokens.query.all())
+    app.logger.error(tok)
     tokenquery = Tokens.query.filter(Tokens.user_token==tok).first()
 #    breakpoint()
     app.logger.error(tokenquery)
