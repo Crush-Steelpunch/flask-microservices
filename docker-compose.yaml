@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  bingo:
+    container_name: bingo
+    build: ./bingo/Dockerfile
+    image: baggypants/bingo:latest
+    ports:
+  lmnop:
+    container_name: lmnop
+    build: .lmnop/Dockerfile
+    image: baggypants/lmnop:latest
+
+
