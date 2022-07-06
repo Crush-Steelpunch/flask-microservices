@@ -4,6 +4,7 @@ from flask import redirect, Response, jsonify, request
 from time import time, localtime
 from datetime import datetime
 from uuid import uuid4
+import requests
 import sys
 
 def tokenexpiredcheck(uidcheck):
@@ -37,6 +38,10 @@ def verify(tok):
 
 @app.route('/reqtoken/<uid>', methods = ['POST'])
 def gentoken(uid):
+    response = requests.get('http://bingo:5000/uid/' + uid)
+    respjson = response.json()
+    if respjson[0].id is None:
+        return Response(status=400)
     tokenquery = Tokens.query.filter(Tokens.user_id==uid).first()
     if tokenquery is None:
         new_tok_dict = gennewtoken()
