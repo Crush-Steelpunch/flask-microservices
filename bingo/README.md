@@ -6,6 +6,10 @@ User service provider, because bingo knows everybodies name-o
 List all users
 Returns JSON
 
+`GET /uid/<uid>`
+Return a specific User
+Returns JSON
+
 `GET /search/<term>`
 return list of matching users
 Returns JSON
