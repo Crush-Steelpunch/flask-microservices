@@ -28,6 +28,7 @@ def gennewtoken():
 
 @app.route('/<tok>', methods = ['GET'])
 def verify(tok):
+    app.logger.error(Tokens.query.all())
     tokenquery = Tokens.query.filter(Tokens.user_token==tok).first()
 #    breakpoint()
     tokenexpiredstatus = tokenexpiredcheck(tokenquery)
