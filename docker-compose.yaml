@@ -5,12 +5,12 @@ services:
     build: ./bingo/
     image: baggypants/bingo:latest
     ports:
-    - published: 5000
+    - 5000
   lmnop:
     container_name: lmnop
     build: ./lmnop/
     image: baggypants/lmnop:latest
     ports:
-    - published: 5000
+    - 5000
 
 
