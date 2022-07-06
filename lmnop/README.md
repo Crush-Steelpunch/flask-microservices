@@ -7,4 +7,4 @@ The Generation is planned to
 Returns Expired status of Token
 
 `POST /reqtoken/<uid>`
-Returns new valid token. Expires any old tokens
+Returns new valid token. Expires any old tokens.
