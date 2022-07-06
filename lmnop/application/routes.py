@@ -40,7 +40,7 @@ def verify(tok):
 def gentoken(uid):
     response = requests.get('http://bingo:5000/uid/' + uid)
     respjson = response.json()
-    print(respjson, file=sys.stderr)
+    app.logger.error(respjson)
 #    if respjson[0].id is None:
 #        return Response(status=400)
     tokenquery = Tokens.query.filter(Tokens.user_id==uid).first()
