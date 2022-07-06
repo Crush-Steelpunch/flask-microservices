@@ -9,7 +9,7 @@ import sys
 
 def tokenexpiredcheck(uidcheck):
     # Does a token exist in the db?
-    app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time()))
+    #app.logger.error(uidcheck.user_expiry.strftime( '$s' ),str(time()))
     if uidcheck is None:
         return True
     else: 
@@ -28,16 +28,15 @@ def gennewtoken():
 
 @app.route('/<tok>', methods = ['GET'])
 def verify(tok):
-    app.logger.error(Tokens.query.all())
+#    app.logger.error(Tokens.query.all())
     tokenquery = Tokens.query.filter(Tokens.user_token==tok).first()
 #    breakpoint()
+    app.logger.error
     tokenexpiredstatus = tokenexpiredcheck(tokenquery)
     if tokenexpiredstatus:
         return jsonify({"expired":"True"})
     else:
         return jsonify({"expired":"False"})
-
-
 
 @app.route('/reqtoken/<uid>', methods = ['POST'])
 def gentoken(uid):
@@ -62,7 +61,3 @@ def gentoken(uid):
         tokenquery.user_expiry = new_tok_dict["new_datetime"]
         db.session.commit()
         return jsonify({"expired":"False","token":new_tok_dict["new_token"]})
-
-
-
-
