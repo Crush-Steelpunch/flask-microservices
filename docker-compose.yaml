@@ -12,5 +12,11 @@ services:
     image: baggypants/lmnop:latest
     ports:
     - 5000
+  racoon:
+    container_name: racoon
+    build: ./racoon/
+    image: baggypants/racoon:latest
+    ports:
+    - 5000
 
 
