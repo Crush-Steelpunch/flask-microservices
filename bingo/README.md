@@ -2,7 +2,7 @@
 
 User service provider, because bingo knows everybodies name-o
 
-`GET / `
+`GET /`
 List all users
 Returns JSON
 
