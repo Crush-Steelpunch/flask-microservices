@@ -14,10 +14,10 @@ def tokenexpiredcheck(uidcheck):
         return True
     else: 
         # has it expired?
-        if uidcheck.user_expiry.strftime( '$s' ) < str(time()):
+        if uidcheck.user_expiry.strftime( '%s' ) < str(time()):
             
-            return False
-    return True
+            return True
+    return False
 
 def gennewtoken():
     new_token = str(uuid4())

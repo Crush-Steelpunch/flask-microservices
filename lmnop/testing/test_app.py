@@ -47,7 +47,7 @@ class TestToken(TestBase):
         db.session.commit()
         response = self.client.get(url_for('verify',tok=tokenuuid.user_token))
         self.assert_200(response)
-        self.assertIn(b"False",  response.data)
+        self.assertIn(b"True",  response.data)
         
 class TestGenToken(TestBase):
     def test_gen_new_token(self):
