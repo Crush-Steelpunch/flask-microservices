@@ -38,9 +38,9 @@ class TestGetAllInfo(TestBase):
 
 class TestSearchUsersInfo(TestBase):
     def test_search_one_user(self):
-        with requests_mock.Mocker() as lmnopreq:
+        with requests_mock.Mocker() as raccoonreq:
             faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
-            lmnopreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
             response = self.client.post(
                 url_for('getuser',user_id=1),
                 json={"token":faketoken,"searchkey":"Physical_Data"},
@@ -50,9 +50,9 @@ class TestSearchUsersInfo(TestBase):
             self.assertEqual(83, dictresp[0]['user_info_value']['B'])
     
     def test_search_one_user_expired(self):
-        with requests_mock.Mocker() as lmnopreq:
+        with requests_mock.Mocker() as raccoonreq:
             faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
-            lmnopreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
             response = self.client.post(
                 url_for('getuser',user_id=1),
                 json={"token":faketoken,"searchkey":"Physical_Data"},
@@ -62,9 +62,9 @@ class TestSearchUsersInfo(TestBase):
 
 class TestAddInfo(TestBase):
     def test_add_with_valid_token(self):
-        with requests_mock.Mocker() as lmnopreq:
+        with requests_mock.Mocker() as raccoonreq:
             faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
-            lmnopreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
             response = self.client.post(
                 url_for('addinfo',user_id=1),
                 json={"token":faketoken,"user_info_key":"Test_Key","user_info_value":{"bloodType":"T","Gender":"T","B":5,"W":6,"H":7,"Height":100,"Birthdate":"1970-01-01"}}
@@ -80,9 +80,9 @@ class TestAddInfo(TestBase):
 
 
     def test_add_with_invalid_token(self):
-        with requests_mock.Mocker() as lmnopreq:
+        with requests_mock.Mocker() as raccoonreq:
             faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
-            lmnopreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
             response = self.client.post(
                 url_for('addinfo',user_id=1),
                 json={
@@ -101,3 +101,80 @@ class TestAddInfo(TestBase):
 
                 )
             self.assert400(response)
+
+class TestDelInfo(TestBase):
+    def test_del_existing_info_valid_token(self):
+        with requests_mock.Mocker() as raccoonreq:
+            faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
+            response = self.client.delete(
+                url_for('delinfo',user_id=1),
+                json={
+                    "token":faketoken,
+                    "searchkey":"Educational_Data"
+                })
+            self.assert_200(response)
+            responsecheck = self.client.post(
+                url_for('getuser',user_id=1),
+                json={"token":faketoken,"searchkey":"Educational_Data"},
+            )
+            self.assert_200(responsecheck)
+            self.assertEqual('[]\n',responsecheck.text)
+
+
+    def test_del_existing_info_invalid_token(self):
+        with requests_mock.Mocker() as raccoonreq:
+            faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
+            response = self.client.delete(
+                url_for('delinfo',user_id=1),
+                json={
+                    "token":faketoken,
+                    "searchkey":"Educational_Data"
+                })
+            self.assert_400(response)
+
+class TestPurgeInfo(TestBase):
+    def test_purge_with_valid_token(self):
+        with requests_mock.Mocker() as raccoonreq:
+            faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
+            response = self.client.delete(
+                url_for('purgeinfo',user_id=1),
+                json={
+                    "token":faketoken,
+                    'yes-i-really-really-mean-it':"purge-this-user-info-i-will-be-responsible-for-the-consequences"
+                })
+            self.assert_200(response)
+            responsecheck = self.client.post(
+                url_for('getuser',user_id=1),
+                json={"token":faketoken,"searchkey":"Educational_Data"},
+            )
+            self.assert_200(responsecheck)
+            self.assertEqual('[]\n',responsecheck.text)
+
+    def test_purge_with_invalid_token(self):
+        with requests_mock.Mocker() as raccoonreq:
+            faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"True"}')
+            response = self.client.delete(
+                url_for('purgeinfo',user_id=1),
+                json={
+                    "token":faketoken,
+                    'yes-i-really-really-mean-it':"purge-this-user-info-i-will-be-responsible-for-the-consequences"
+                })
+            self.assert_400(response)
+            self.assertIn("Token Expired", response.text)
+
+    def test_purge_with_invalid_confirmation(self):
+        with requests_mock.Mocker() as raccoonreq:
+            faketoken = "626dec4f-c87a-4e41-8f50-cedce221f5c7"
+            raccoonreq.get('http://lmnop:5000/' + faketoken, text='{"expired":"False"}')
+            response = self.client.delete(
+                url_for('purgeinfo',user_id=1),
+                json={
+                    "token":faketoken,
+                    'yes-i-really-really-mean-it':"purge-this-user-info-i-will-be-responsible-for-the-conquistadors"
+                })
+            self.assert_400(response)
+            self.assertIn("Invalid Request", response.text)
